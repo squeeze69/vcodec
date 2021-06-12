@@ -11,23 +11,42 @@ import (
 	"golang.org/x/image/riff"
 )
 
+var exitValue = 0
+
 func main() {
+	main2()
+	fmt.Printf("Exitvalue: %d\n", exitValue)
+	os.Exit(exitValue)
+}
+
+func main2() {
 	f, err := os.Open(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	formType, r, err := riff.NewReader(bufio.NewReader(io.LimitReader(f, 65000)))
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("Codec: %s\n", r)
+			for _, v := range os.Args[2:] {
+				if r == v {
+					exitValue = 1
+					break
+				}
+			}
+		}
+	}()
+	formType, r, err := riff.NewReader(bufio.NewReader(io.LimitReader(f, 16384)))
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("RIFF(%s)\n", formType)
-	if err := dump(r, ".\t"); err != nil {
+	if err := scanriff(r); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func dump(r *riff.Reader, indent string) error {
+func scanriff(r *riff.Reader) error {
 	for {
 		chunkID, chunkLen, chunkData, err := r.Next()
 		if err == io.EOF {
@@ -37,12 +56,11 @@ func dump(r *riff.Reader, indent string) error {
 			return err
 		}
 		if chunkID == riff.LIST {
-			listType, list, err := riff.NewListReader(chunkLen, chunkData)
+			_, list, err := riff.NewListReader(chunkLen, chunkData)
 			if err != nil {
 				return err
 			}
-			fmt.Printf("%sLIST(%s)\n", indent, listType)
-			if err := dump(list, indent+".\t"); err != nil {
+			if err := scanriff(list); err != nil {
 				return err
 			}
 			continue
@@ -52,8 +70,7 @@ func dump(r *riff.Reader, indent string) error {
 			return err
 		}
 		if string(b[0:4]) == "vids" {
-			log.Printf("_%s_", string(b[4:8]))
+			panic(string(b[4:8]))
 		}
-		fmt.Printf("%s%s %q\n", indent, chunkID, b)
 	}
 }
