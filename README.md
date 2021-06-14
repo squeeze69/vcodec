@@ -4,7 +4,7 @@
 
 ## program written in [GO](https://golang.org)
 
-Scan a RIFF file for the "vids" section, then exit with an error level 1 if the video codec is listed on the command line
+Scan a RIFF file for the "vids" section, then exit with an error level 1 if the video codec is listed on the command line. The "heavy lift" is made by the imaage/riff library.
 
 i.e.:
 
