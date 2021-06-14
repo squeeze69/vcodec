@@ -1,3 +1,4 @@
+// vcodec by Squeeze69
 package main
 
 import (
@@ -14,6 +15,10 @@ import (
 var exitValue = 0
 
 func main() {
+	if len(os.Args) < 3 {
+		fmt.Print("Usage: vcodec riff_file codec1 codec2 ...\ncodec name case DO matter\n")
+		os.Exit(2)
+	}
 	main2()
 	fmt.Printf("Exitvalue: %d\n", exitValue)
 	os.Exit(exitValue)
