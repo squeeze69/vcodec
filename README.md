@@ -4,6 +4,8 @@
 
 ## program written in [GO](https://golang.org)
 
+[![Build Status](https://travis-ci.com/squeeze69/vcodec.svg?branch=master)](https://travis-ci.com/squeeze69/vcodec)
+
 Scan a RIFF file for the "vids" section, then exit with an error level 1 if the video codec is listed on the command line. The "heavy lift" is made by the image/riff library.
 
 i.e.:

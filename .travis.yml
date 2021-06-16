@@ -1,0 +1,10 @@
+language: go
+go:
+  - "1.14.x"
+  - "1.15.x"
+  - "1.16.x"
+  - master
+notifications:
+  email:
+   on_success: never
+   on_failure: always
