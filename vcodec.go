@@ -3,11 +3,13 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"golang.org/x/image/riff"
 )
@@ -15,17 +17,19 @@ import (
 var exitValue = 0
 
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Print("Usage: vcodec riff_file codec1 codec2 ...\ncodec name case DO matter\n")
+	flag.Parse()
+	if len(flag.Args()) < 2 {
+		fmt.Print("Usage: vcodec riff_file codec1 codec2 ...\ncodec name is case insensitive\n")
 		os.Exit(2)
 	}
+	//A little trick to handle the "panic", os.Exit doesn't call deferred functions
 	main2()
-	fmt.Printf("Exitvalue: %d\n", exitValue)
+	fmt.Printf("Exit Value: %d\n", exitValue)
 	os.Exit(exitValue)
 }
 
 func main2() {
-	f, err := os.Open(os.Args[1])
+	f, err := os.Open(flag.Arg(0))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,15 +37,16 @@ func main2() {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Printf("Codec: %s\n", r)
-			for _, v := range os.Args[2:] {
-				if r == v {
+			codec := fmt.Sprintf("%s", r)
+			for _, v := range flag.Args()[1:] {
+				if strings.EqualFold(codec, v) {
 					exitValue = 1
 					break
 				}
 			}
 		}
 	}()
-	formType, r, err := riff.NewReader(bufio.NewReader(io.LimitReader(f, 16384)))
+	formType, r, err := riff.NewReader(bufio.NewReader(io.LimitReader(f, 8192)))
 	if err != nil {
 		log.Fatal(err)
 	}
