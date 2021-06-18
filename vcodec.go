@@ -34,6 +34,7 @@ func main2() {
 		log.Fatal(err)
 	}
 	defer f.Close()
+	// check for a matching codec, case insensitive
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Printf("Codec: %s\n", r)
@@ -56,6 +57,7 @@ func main2() {
 	}
 }
 
+//scan riff for chunk data
 func scanriff(r *riff.Reader) error {
 	for {
 		chunkID, chunkLen, chunkData, err := r.Next()
