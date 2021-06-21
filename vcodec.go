@@ -15,6 +15,7 @@ import (
 )
 
 var exitValue = 0
+var codecList []string
 
 func main() {
 	flag.Parse()
@@ -22,6 +23,9 @@ func main() {
 		fmt.Print("Usage: vcodec riff_file codec1 codec2 ...\ncodec name is case insensitive\n")
 		os.Exit(2)
 	}
+	//the next step is to allow to load the codecList from a file, as an alternative
+	codecList = flag.Args()[1:]
+
 	//A little trick to handle the "panic", os.Exit doesn't call deferred functions
 	main2()
 	fmt.Printf("Exit Value: %d\n", exitValue)
@@ -39,7 +43,7 @@ func main2() {
 		if r := recover(); r != nil {
 			fmt.Printf("Codec: %s\n", r)
 			codec := fmt.Sprintf("%s", r)
-			for _, v := range flag.Args()[1:] {
+			for _, v := range codecList {
 				if strings.EqualFold(codec, v) {
 					exitValue = 1
 					break
@@ -82,7 +86,18 @@ func scanriff(r *riff.Reader) error {
 			return err
 		}
 		if string(b[0:4]) == "vids" {
-			panic(string(b[4:8]))
+			codec := string(b[4:8])
+			chunkID, _, chunkData, err := r.Next()
+			if err != nil {
+				panic(codec)
+			}
+			if fmt.Sprintf("%s", chunkID) == "strf" {
+				b, err = ioutil.ReadAll(chunkData)
+				if err == nil {
+					codec = string(b[16:20]) // this should be the right codec
+				}
+			}
+			panic(codec)
 		}
 	}
 }
