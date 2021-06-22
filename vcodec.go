@@ -19,12 +19,14 @@ var codecList []string
 
 func main() {
 	flag.Parse()
-	if len(flag.Args()) < 2 {
-		fmt.Print("Usage: vcodec riff_file codec1 codec2 ...\ncodec name is case insensitive\n")
+	if len(flag.Args()) < 1 {
+		fmt.Print("Usage: vcodec riff_file [optional codec1 codec2 ...]\ncodec name is case insensitive\n")
 		os.Exit(2)
 	}
 	//the next step is to allow to load the codecList from a file, as an alternative
-	codecList = flag.Args()[1:]
+	if len(flag.Args()) > 1 {
+		codecList = flag.Args()[1:]
+	}
 
 	//A little trick to handle the "panic", os.Exit doesn't call deferred functions
 	main2()

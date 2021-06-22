@@ -6,6 +6,8 @@
 
 Scan a RIFF file for the codec (vids in the strh and the structure in the following strf section), then exit with an error level 1 if the video codec is listed on the command line. The "heavy lift" is made by the image/riff library.
 
+If it's used only with the file name, it prints the codec and exits with errorlevel 0.
+
 It's partially based on one of the examples in the image/riff section (the read chunk,etc...).
 
 i.e.:
