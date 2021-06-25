@@ -14,6 +14,11 @@ i.e.:
 
 vcodec file.avi DIV3 DX50 ... (case insensitive)
 
+or:
+vcodec -c codeclist file.avi
+
+where codeclist is a "text" file with a codec per line
+
 It's quite useful when you want to re-encode with ffmpeg or others a bunch of files only if they use certain codecs
 
 Reference (Even if I do need to study them a little more)

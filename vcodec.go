@@ -17,15 +17,29 @@ import (
 var exitValue = 0
 var codecList []string
 
+var codecListfile string
+
 func main() {
+	flag.StringVar(&codecListfile, "c", "", "-c codeclistfile (one per line")
 	flag.Parse()
-	if len(flag.Args()) < 1 {
-		fmt.Print("Usage: vcodec riff_file [optional codec1 codec2 ...]\ncodec name is case insensitive\n")
+	if flag.NArg() < 1 {
+		fmt.Print("Usage: vcodec [options] riff_file [optional codec1 codec2 ...]\ncodec name is case insensitive\n")
+		flag.Usage()
 		os.Exit(2)
 	}
 	//the next step is to allow to load the codecList from a file, as an alternative
-	if len(flag.Args()) > 1 {
+	if flag.NArg() > 1 {
 		codecList = flag.Args()[1:]
+	} else if codecListfile != "" {
+		buf, err := os.ReadFile(codecListfile)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(3)
+		}
+		scanner := bufio.NewScanner(strings.NewReader(string(buf)))
+		for scanner.Scan() {
+			codecList = append(codecList, scanner.Text())
+		}
 	}
 
 	//A little trick to handle the "panic", os.Exit doesn't call deferred functions
