@@ -20,7 +20,7 @@ var codecList []string
 var codecListfile string
 
 func main() {
-	flag.StringVar(&codecListfile, "c", "", "-c codeclistfile (one per line")
+	flag.StringVar(&codecListfile, "c", "", "-c codeclistfile (one per line)")
 	flag.Parse()
 	if flag.NArg() < 1 {
 		fmt.Print("Usage: vcodec [options] riff_file [optional codec1 codec2 ...]\ncodec name is case insensitive\n")
@@ -59,8 +59,8 @@ func main2() {
 		if r := recover(); r != nil {
 			fmt.Printf("Codec: %s\n", r)
 			codec := fmt.Sprintf("%s", r)
-			for _, v := range codecList {
-				if strings.EqualFold(codec, v) {
+			for i := range codecList {
+				if strings.EqualFold(codec, codecList[i]) {
 					exitValue = 1
 					break
 				}
