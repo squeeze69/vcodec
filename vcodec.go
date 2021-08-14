@@ -14,9 +14,13 @@ import (
 	"golang.org/x/image/riff"
 )
 
+// value for os.Exit
 var exitValue = 0
+
+// list of codecs to scan for
 var codecList []string
 
+// file to read codecList from (optional)
 var codecListfile string
 
 func main() {
@@ -48,6 +52,7 @@ func main() {
 	os.Exit(exitValue)
 }
 
+// Second main, to overcame os.Exit behaviour (deferred func execution)
 func main2() {
 	f, err := os.Open(flag.Arg(0))
 	if err != nil {
