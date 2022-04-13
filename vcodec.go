@@ -14,6 +14,23 @@ import (
 	"golang.org/x/image/riff"
 )
 
+// biCompression is the fourCC code
+/*
+type tagBITMAPINFOHEADER struct {
+	biSize          uint32
+	biWidth         int32
+	biHeight        int32
+	biPlanes        uint16
+	biBitCount      uint16
+	biCompression   uint32
+	biSizeImage     uint16
+	biXPelsPerMeter int32
+	biYPelsPerMeter int32
+	biClrUsed       uint32
+	biClrImportant  uint32
+}
+*/
+
 // value for os.Exit
 var exitValue = 0
 
