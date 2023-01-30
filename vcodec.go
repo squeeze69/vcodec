@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -99,7 +98,7 @@ func main2() {
 	}
 }
 
-//scan riff for chunk data
+// scan riff for chunk data
 func scanriff(r *riff.Reader) error {
 	for {
 		chunkID, chunkLen, chunkData, err := r.Next()
@@ -119,7 +118,7 @@ func scanriff(r *riff.Reader) error {
 			}
 			continue
 		}
-		b, err := ioutil.ReadAll(chunkData)
+		b, err := io.ReadAll(chunkData)
 		if err != nil {
 			return err
 		}
@@ -130,7 +129,7 @@ func scanriff(r *riff.Reader) error {
 				panic(codec)
 			}
 			if fmt.Sprintf("%s", chunkID) == "strf" {
-				b, err = ioutil.ReadAll(chunkData)
+				b, err = io.ReadAll(chunkData)
 				if err == nil {
 					codec = string(b[16:20]) // this should be the right codec
 				}
