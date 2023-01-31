@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"golang.org/x/image/riff"
+	"go.dev/x/image/riff"
 )
 
 // biCompression is the fourCC code

@@ -2,7 +2,7 @@
 
 ## quick and dirty program to test for particular vcodec in an AVI (or any format supported by RIFF library)
 
-## program written in [GO](https://golang.org)
+## program written in [GO](https://go.dev)
 
 Scan a RIFF file for the codec (vids in the strh and the structure in the following strf section), then exit with an error level 1 if the video codec is listed on the command line. The "heavy lift" is made by the image/riff library.
 
