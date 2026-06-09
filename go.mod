@@ -1,5 +1,5 @@
 module github.com/squeeze69/vcodec
 
-go 1.25.0
+go 1.26
 
-require golang.org/x/image v0.38.0
+require golang.org/x/image v0.42.0
